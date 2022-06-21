@@ -10,6 +10,8 @@ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 See the Mulan PSL v2 for more details.
 */
 
+use std::path::Path;
+
 use gtk::prelude::*;
 use gtk::Application;
 use gtk::ApplicationWindow;
@@ -18,13 +20,12 @@ use libappindicator::{AppIndicator, AppIndicatorStatus};
 
 fn main() {
     let app = Application::builder()
-        .application_id("yakkhini.weye")
+        .application_id("com.github.yakkhini.weye")
         .build();
 
-    let mut indicator = AppIndicator::new("libappindicator test application", "");
-    indicator.set_status(AppIndicatorStatus::Active);
-
     app.connect_activate(build_ui);
+
+    app.connect_activate(build_tray);
 
     app.run();
 }
@@ -36,4 +37,20 @@ fn build_ui(app: &Application) {
         .build();
 
     window.present();
+}
+
+fn build_tray(_app: &Application) {
+    let mut indicator = AppIndicator::new("libappindicator test application", "");
+    indicator.set_status(AppIndicatorStatus::Active);
+    let icon_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("assets");
+    indicator.set_icon_theme_path(icon_path.to_str().unwrap());
+    indicator.set_icon_full("rust-logo", "icon");
+    let mut m = gtk::Menu::new();
+    let mi = gtk::CheckMenuItem::with_label("Hello Rust!");
+    mi.connect_activate(|_| {
+        gtk::main_quit();
+    });
+    m.append(&mi);
+    indicator.set_menu(&mut m);
+    m.show_all();
 }
