@@ -44,13 +44,13 @@ fn build_tray(_app: &Application) {
     indicator.set_status(AppIndicatorStatus::Active);
     let icon_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("assets");
     indicator.set_icon_theme_path(icon_path.to_str().unwrap());
-    indicator.set_icon_full("rust-logo", "icon");
-    let mut m = gtk::Menu::new();
-    let mi = gtk::CheckMenuItem::with_label("Hello Rust!");
-    mi.connect_activate(|_| {
+    indicator.set_icon_full("screenshot-one", "icon");
+    let mut menu = gtk::Menu::new();
+    let menu_exit = gtk::MenuItem::with_label("Exit");
+    menu_exit.connect_activate(|_| {
         gtk::main_quit();
     });
-    m.append(&mi);
-    indicator.set_menu(&mut m);
-    m.show_all();
+    menu.append(&menu_exit);
+    indicator.set_menu(&mut menu);
+    menu.show_all();
 }
