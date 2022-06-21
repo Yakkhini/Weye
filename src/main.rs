@@ -26,20 +26,9 @@ fn main() {
 
     app.hold();
 
-    app.connect_activate(build_ui);
-
     app.connect_activate(build_tray);
 
     app.run();
-}
-
-fn build_ui(app: &Application) {
-    let window = ApplicationWindow::builder()
-        .application(app)
-        .title("Weye")
-        .build();
-
-    window.present();
 }
 
 fn build_tray(_app: &Application) {
@@ -53,10 +42,12 @@ fn build_tray(_app: &Application) {
     let menu_fulshot = gtk::MenuItem::with_label("Full-screen shot");
     let menu_exit = gtk::MenuItem::with_label("Exit");
     menu_fulshot.connect_activate(|_| {
+        let save_path = Path::new("/diske/Rust/weye/1.png");
         Command::new("grimshot")
-            .arg("save output")
-            .arg("$XDG_SCREENSHOTS_DIR/$USER")
-            .arg("@$HOST_`date +\"%Y%m%d%H%M%S\".png`");
+            .arg("save")
+            .arg("output")
+            .arg(save_path)
+            .output().expect("grimshot excute failed");
     });
     menu_exit.connect_activate(|_| {
         gtk::main_quit();
