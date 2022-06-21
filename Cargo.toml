@@ -18,3 +18,5 @@ edition = "2021"
 [dependencies]
 gtk = "0.15.5"
 libappindicator = "0.7.0"
+toml = "0.5.9"
+serde = { version = "1.0", features = ["derive"] }
