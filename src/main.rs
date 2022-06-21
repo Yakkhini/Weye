@@ -11,6 +11,7 @@ See the Mulan PSL v2 for more details.
 */
 
 use std::path::Path;
+use std::process::Command;
 
 use gtk::prelude::*;
 use gtk::Application;
@@ -22,6 +23,8 @@ fn main() {
     let app = Application::builder()
         .application_id("com.github.yakkhini.weye")
         .build();
+
+    app.hold();
 
     app.connect_activate(build_ui);
 
@@ -45,11 +48,20 @@ fn build_tray(_app: &Application) {
     let icon_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("assets");
     indicator.set_icon_theme_path(icon_path.to_str().unwrap());
     indicator.set_icon_full("screenshot-one", "icon");
+
     let mut menu = gtk::Menu::new();
+    let menu_fulshot = gtk::MenuItem::with_label("Full-screen shot");
     let menu_exit = gtk::MenuItem::with_label("Exit");
+    menu_fulshot.connect_activate(|_| {
+        Command::new("grimshot")
+            .arg("save output")
+            .arg("$XDG_SCREENSHOTS_DIR/$USER")
+            .arg("@$HOST_`date +\"%Y%m%d%H%M%S\".png`");
+    });
     menu_exit.connect_activate(|_| {
         gtk::main_quit();
     });
+    menu.append(&menu_fulshot);
     menu.append(&menu_exit);
     indicator.set_menu(&mut menu);
     menu.show_all();
