@@ -11,7 +11,11 @@
 [package]
 name = "weye"
 version = "0.1.0"
+authors = ["Yakkhini <sign@yechanv.cc>"]
 edition = "2021"
+description = "A lightweight screenshot for sway."
+repository = "https://github.com/Yakkhini/Weye"
+license = "Mulan PSL v2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
