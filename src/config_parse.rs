@@ -1,3 +1,15 @@
+/*
+Copyright (c) 2022 Yakkhini
+Weye is licensed under Mulan PSL v2.
+You can use this software according to the terms and conditions of the Mulan PSL v2.
+You may obtain a copy of Mulan PSL v2 at:
+         http://license.coscl.org.cn/MulanPSL2
+THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+See the Mulan PSL v2 for more details.
+*/
+
 use serde::{Deserialize, Serialize};
 
 use chrono::prelude::*;
@@ -19,7 +31,7 @@ struct AvailableNameSlice {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SingleConfig {
-    delay: i32,
+    pub delay: i32,
     save_path: String,
     file_name: String,
     save_type: String,
@@ -93,6 +105,8 @@ pub fn save_path_gen(single_config: &SingleConfig) -> String {
 
     path += single_config.save_path.as_str();
     path += save_name_gen(&single_config.file_name).as_str();
+    path += ".";
+    path += single_config.save_type.as_str();
 
     return path;
 }

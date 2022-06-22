@@ -1,8 +1,21 @@
+/*
+Copyright (c) 2022 Yakkhini
+Weye is licensed under Mulan PSL v2.
+You can use this software according to the terms and conditions of the Mulan PSL v2.
+You may obtain a copy of Mulan PSL v2 at:
+         http://license.coscl.org.cn/MulanPSL2
+THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+See the Mulan PSL v2 for more details.
+*/
+
 use gtk::prelude::*;
 
 use libappindicator::{AppIndicator, AppIndicatorStatus};
 use std::path::Path;
 use std::process::Command;
+use std::{thread, time};
 
 use crate::config_parse;
 
@@ -24,12 +37,23 @@ pub fn build_tray() {
 
         let fulshot_path = config_parse::save_path_gen(&config.config_fulshot);
 
+        let delay = time::Duration::from_secs(config.config_fulshot.delay.try_into().unwrap());
+
+        let notify = fulshot_path.clone() + "saved";
+        thread::sleep(delay);
+
         Command::new("grimshot")
             .arg("save")
             .arg("output")
             .arg(fulshot_path)
             .output()
             .expect("grimshot excute failed");
+        Command::new("notify-send")
+            .arg("--app-name=Weye")
+            .arg("--expire-time=3000")
+            .arg(notify)
+            .output()
+            .expect("notify excute failed");
     });
     menu_exit.connect_activate(|_| {
         gtk::main_quit();
