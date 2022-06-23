@@ -50,10 +50,19 @@ pub fn config_parse() -> Config {
         None => panic!("Can't find HOME env."),
     };
     let config_path = home + "/.config/weye/config.toml";
-    let mut config_file = match File::open(&config_path) {
-        Ok(file) => file,
-        Err(e) => panic!("no such config file {} exception:{}", &config_path, e),
-    };
+    let etc_config = "/etc/weye/config.toml".to_string();
+    let usr_config = "/usr/share/weye/defautl.toml".to_string();
+
+    let mut config_file = File::open(&usr_config).unwrap();
+
+    if File::open(&etc_config).is_ok() {
+        config_file = File::open(&etc_config).unwrap();
+    }
+
+    if File::open(&config_path).is_ok() {
+        config_file = File::open(&config_path).unwrap();
+    }
+
     let mut config_text = String::new();
     match config_file.read_to_string(&mut config_text) {
         Ok(string) => string,
