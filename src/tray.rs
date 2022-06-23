@@ -23,9 +23,9 @@ pub fn build_tray() {
     let mut indicator = AppIndicator::new("libappindicator test application", "");
     indicator.set_status(AppIndicatorStatus::Active);
 
-    let icon_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("assets");
+    let icon_path = Path::new("/usr/share/weye");
     indicator.set_icon_theme_path(icon_path.to_str().unwrap());
-    indicator.set_icon_full("screenshot-one", "icon");
+    indicator.set_icon_full("icon", "icon");
 
     let mut menu = gtk::Menu::new();
 
