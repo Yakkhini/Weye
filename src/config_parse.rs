@@ -51,7 +51,7 @@ pub fn config_parse() -> Config {
     };
     let config_path = home + "/.config/weye/config.toml";
     let etc_config = "/etc/weye/config.toml".to_string();
-    let usr_config = "/usr/share/weye/defautl.toml".to_string();
+    let usr_config = "/usr/share/weye/default.toml".to_string();
 
     let mut config_file = File::open(&usr_config).unwrap();
 
